@@ -1,0 +1,55 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Saved places</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="saved-places-page">
+  <div class="saved-places-content">
+    <div class="page-intro">
+      <p class="eyebrow">Your collection</p>
+      <h1>Places worth remembering</h1>
+      <p>
+        Save locations from your home page and find them here whenever you need
+        them.
+      </p>
+    </div>
+
+    @if (places.length === 0) {
+      <section class="empty-state">
+        <ion-icon name="bookmark-outline" aria-hidden="true"></ion-icon>
+        <h2>No saved places yet</h2>
+        <p>
+          Start by saving a location from your current position or from the
+          sample places.
+        </p>
+        <ion-button routerLink="/home">Explore places</ion-button>
+      </section>
+    } @else {
+      <div class="places-list">
+        @for (place of places; track place.savedAt) {
+          <article class="place-card">
+            <div>
+              <p class="eyebrow">Saved location</p>
+              <h2>{{ place.name }}</h2>
+              <p>Latitude {{ place.latitude | number: "1.4-4" }}</p>
+              <p>Longitude {{ place.longitude | number: "1.4-4" }}</p>
+              <p>Altitude {{ place.altitude }} m</p>
+            </div>
+            <ion-button
+              fill="clear"
+              color="danger"
+              aria-label="Delete saved place"
+              (click)="deletePlace(place)"
+            >
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-button>
+          </article>
+        }
+      </div>
+    }
+  </div>
+</ion-content>

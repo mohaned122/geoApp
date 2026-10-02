@@ -1,0 +1,126 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Geo Memory</ion-title>
+    <ion-button
+      slot="end"
+      fill="clear"
+      routerLink="/saved-places"
+      aria-label="Open saved places"
+    >
+      <ion-icon slot="icon-only" name="bookmark-outline"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="home-page">
+  <main class="home-content">
+    <section class="hero">
+      <p class="eyebrow">Your location journal</p>
+      <h1>Remember where life takes you.</h1>
+      <p>
+        Track a journey in real time, check your coordinates, and keep the
+        places that matter.
+      </p>
+      <div class="hero-actions">
+        <ion-button (click)="suiviActif ? arreterSuivi() : demarrerSuivi()">
+          <ion-icon
+            slot="start"
+            [name]="suiviActif ? 'stop-circle-outline' : 'navigate-outline'"
+          ></ion-icon>
+          {{ suiviActif ? "Stop tracking" : "Start tracking" }}
+        </ion-button>
+        <ion-button fill="outline" routerLink="/saved-places"
+          >Saved places</ion-button
+        >
+      </div>
+    </section>
+
+    <article class="tracking-card" aria-live="polite">
+      <div class="tracking-card__header">
+        <div>
+          <p class="eyebrow">Live tracking</p>
+          <h2>Current journey</h2>
+        </div>
+        <span class="tracking-status" [class.is-active]="suiviActif">
+          {{ suiviActif ? "Active" : "Ready" }}
+        </span>
+      </div>
+      <div class="tracking-stats">
+        <div>
+          <strong>{{ compteurPositions }}</strong
+          ><span>positions</span>
+        </div>
+        <div>
+          <strong>{{ dureeSuivi }} s</strong><span>duration</span>
+        </div>
+        <div>
+          <strong>{{ mypath.length }}</strong
+          ><span>path points</span>
+        </div>
+      </div>
+      <p class="tracking-message">
+        {{
+          suiviActif
+            ? "Your position is updated as you move."
+            : "Start tracking to record your path in real time."
+        }}
+      </p>
+    </article>
+
+    <section class="section-heading">
+      <div>
+        <p class="eyebrow">Explore</p>
+        <h2>Places to remember</h2>
+      </div>
+      <span>{{ listA.length }} places</span>
+    </section>
+
+    <div class="card-holder">
+      @for (item of listA; track item) {
+        <article class="place-card">
+          <div class="place-card__topline">
+            <span class="place-dot"></span>
+            <span>Coordinate point</span>
+          </div>
+          <h3>{{ item.name }}</h3>
+          <p>Lat {{ item.latitude }} · Lng {{ item.longitude }}</p>
+          <p>Altitude {{ item.altitude }} m</p>
+          <ion-button fill="clear" size="small" (click)="enregistrerLieu(item)">
+            <ion-icon slot="start" name="bookmark-outline"></ion-icon>
+            Save place
+          </ion-button>
+        </article>
+      }
+    </div>
+
+    <article class="location-card" aria-live="polite">
+      <div>
+        <p class="eyebrow">One precise moment</p>
+        <h2>My exact location</h2>
+        <p class="location-copy">
+          Check your current coordinates without starting a journey.
+        </p>
+      </div>
+      <ion-button fill="outline" (click)="obtenirPositionPonctuelle()"
+        >Get location</ion-button
+      >
+      <div class="coordinate-grid">
+        <span
+          >Latitude<strong>{{ latitude ?? "Not available" }}</strong></span
+        >
+        <span
+          >Longitude<strong>{{ longitude ?? "Not available" }}</strong></span
+        >
+        <span
+          >Altitude<strong
+            >{{ altitude ?? "Not available"
+            }}{{ altitude !== null ? " m" : "" }}</strong
+          ></span
+        >
+      </div>
+    </article>
+  </main>
+</ion-content>
